@@ -15,10 +15,10 @@ exports.shortenUrl = (url, cb) => {
   if (url === null || url === 'undefined') {
     return cb(new Error('Invalid url'));
   }
-  const noProtocolUrl = getHost(url);
-  dns.lookup(noProtocolUrl, (err, addresses, family) => {
+  const host = getHost(url);
+  dns.lookup(host, (err, addresses, family) => {
     if (err) {
-      console.log(`DNS Lookup FAILED: ${noProtocolUrl}`);
+      console.log(`DNS Lookup FAILED: ${host}`);
       return cb(err);
     }
 
