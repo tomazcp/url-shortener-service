@@ -1,16 +1,21 @@
 const urlRepo = require('../repository/urlRepo');
 const dns = require('dns');
-const PROTOCOL_REGEX = /^https?:\/\//i;
+const PROTOCOL_REGEX = /[^https?:\/\/](.*)\.[a-z]+/gi;
 
-const removeProtocol = (url) => {
-  return url.replace(PROTOCOL_REGEX, '');
+const getHost = (url) => {
+  const matches = url.match(PROTOCOL_REGEX);
+  if (!matches) {
+    throw Error('Invalid Url');
+  }
+
+  return matches[0];
 };
 
 exports.shortenUrl = (url, cb) => {
   if (url === null || url === 'undefined') {
     return cb(new Error('Invalid url'));
   }
-  const noProtocolUrl = removeProtocol(url);
+  const noProtocolUrl = getHost(url);
   dns.lookup(noProtocolUrl, (err, addresses, family) => {
     if (err) {
       console.log(`DNS Lookup FAILED: ${noProtocolUrl}`);
