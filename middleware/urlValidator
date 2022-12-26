@@ -1,0 +1,23 @@
+const dns = require('dns');
+const ERR_RESPONSE = { error: 'invalid url' };
+
+const isValidUrl = (url) => {
+  dns.lookup(url, (err, addresses, family) => {
+    if (err) {
+      console.log(err);
+      return false;
+    }
+    return true;
+  });
+};
+
+const requestBodyUrlMw = (req, res, next) => {
+  const { url } = req.body.url;
+  if (isValidUrl(url)) {
+    return next();
+  }
+
+  return res.json(ERR_RESPONSE);
+};
+
+module.exports = requestBodyUrlMw;
