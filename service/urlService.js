@@ -13,6 +13,7 @@ exports.shortenUrl = (url, cb) => {
   const noProtocolUrl = removeProtocol(url);
   dns.lookup(noProtocolUrl, (err, addresses, family) => {
     if (err) {
+      console.log(`DNS Lookup FAILED: ${url}`);
       return cb(err);
     }
 
