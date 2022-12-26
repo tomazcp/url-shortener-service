@@ -16,10 +16,16 @@ exports.shortenUrl = (url, cb) => {
       return cb(err);
     }
 
-    urlRepo.storeUrl(url, (id) => {
-      return cb(null, { originalUrl: url, shortUrl: id });
+    urlRepo.storeUrl(url, (data) => {
+      return cb(null, { originalUrl: data.originalUrl, shortUrl: data._id });
     });
   });
 };
 
-exports.getOriginalUrl = (shortUrl) => urlRepo.getByShortUrl(shortUrl);
+exports.getOriginalUrl = (shortUrl, done) =>
+  urlRepo.getByShortUrl(shortUrl, (err, data) => {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  });

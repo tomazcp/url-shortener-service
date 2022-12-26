@@ -3,10 +3,13 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
+const dbConfig = require('./config/dbConfig');
 const urlRouter = require('./routes/urlRouter');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
+
+dbConfig.connect(process.env.DB_URL);
 
 app.use(cors());
 

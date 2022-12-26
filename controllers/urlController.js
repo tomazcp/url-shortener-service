@@ -18,8 +18,10 @@ exports.postUrl = (req, res) => {
 
 exports.goTo = (req, res) => {
   const shortUrl = req.params.shortUrl;
-  console.log(shortUrl);
-  const originalUrl = urlService.getOriginalUrl(shortUrl);
-  console.log(originalUrl);
-  return res.redirect(originalUrl);
+  urlService.getOriginalUrl(shortUrl, (err, data) => {
+    if (err) {
+      return res.json(ERR_RESPONSE);
+    }
+    return res.redirect(data);
+  });
 };

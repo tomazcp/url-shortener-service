@@ -1,18 +1,25 @@
-const urls = new Map();
-let counter = 0;
+const Url = require('../models/url');
 
-const storeUrl = (originalUrl, cb) => {
-  new Promise((resolve, _) => {
-    counter += 1;
-    return resolve(counter);
-  }).then((data) => {
-    urls.set(`${data}`, originalUrl);
-    return cb(data);
+const storeUrl = (originalUrl, done) => {
+  new Url({
+    originalUrl,
+  }).save((err, data) => {
+    if (err) {
+      console.log(err);
+      return done(null);
+    }
+
+    return done(data);
   });
 };
 
-const getByShortUrl = (shortUrl) => {
-  return urls.get(shortUrl);
+const getByShortUrl = (shortUrl, done) => {
+  return Url.findById(shortUrl, (err, data) => {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data.originalUrl);
+  });
 };
 
 module.exports = { storeUrl, getByShortUrl };
